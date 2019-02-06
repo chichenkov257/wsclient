@@ -1,7 +1,7 @@
 # nsb
 
 # Подключится к серверу:
-1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/client/js/libs/dispatcher.dev.js);
+1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/blob/master/js/libs/dispatcher.dev.js);
 2) Библиотека предназначена для подключения к нашему серверу.
 
 
