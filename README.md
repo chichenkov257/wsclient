@@ -1,18 +1,56 @@
 # nsb
 
-# Install 
-```bash
-npm install
+# Подключится к серверу:
+1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/client/js/libs/dispatcher.dev.js);
+2) Библиотека предназначена для подключения к нашему серверу.
+
+
+#### Пример
+Инициализация диспетчера
+```javascript
+var dispatcher = new Dispatcher({
+    protocol: "ws", // адрес протокола вебсокета
+    host: "<ip_address>", // адрес сервера
+    port: "1400"  // порт на котором работает сервер
+});
+
+// Обработка готовности
+dispatcher.on("ready", function(){
+    // Отработает когда соединение будет установлено и можно будет
+    // начинать отсылать запросы к серверу.
+});
+
+// Создать новый хэндлер, на который будут приходить сообщения от сервера.
+var id = dispatcher.add(function (_data){
+    // Обработка ответа от сервера
+});
+
+// Отправить запрос на сервер
+// Пример:
+// Параметры:
+// Идентификатор хэндлера.
+// Адрес запроса
+// Параметры запроса
+dispatcher.send(id, ["api", "user", "get_auth_token"], {});
+
+// Исключить данный хэндлер от подписки
+dispatcher.remove(id);
 ```
 
-# API
-- User
-    - get_auth_token
-    - auth
-    - get_user_info
-    
 
-## get_auth_token   
+
+
+# API
+- [User](#User)
+    - [get_auth_token](#get_auth_token)
+    - [auth](#auth)
+    - [get_user_info](#get_user_info)
+
+## User
+Область запросов для работы с пользователем нашей системы
+
+
+## get_auth_token
 Для авторизации через стим необходимо получить специальный токен
 #### way
     ["api", "user", "get_auth_token"]
@@ -20,11 +58,22 @@ npm install
     {}
 #### response
     auth_token: String
-        
+#### examle
+```javascript
+var id = dispatcher.add(function (_e) {
+    dispatcher.remove(id);
+    console.log(_e.auth_token);
+});
+dispatcher.send(id, ["api", "user", "get_auth_token"]);
+```
+
+
+
+
 ## auth
 Необходимо выполнить авторизацию через стим
+#### Пример:
 ```javascript
-    // Пример
     var auth_token = _data.auth_token;
 
     var options = {
@@ -46,9 +95,9 @@ npm install
 
     window.location = uri;
 ```
-Результат запроса в строке отправить по этом адресу. 
+Результат запроса в строке отправить по этом адресу.
 Результатом будет request_token; Он необходим что бы выполнять запросы к серверу.
-         
+
 #### way
     ["api", "user", "auth"]
 #### request
@@ -69,8 +118,20 @@ npm install
     }
 #### response
     request_token: String
-    
-    
+#### example
+```javascript
+var id = dispatcher.add(function (_data) {
+    sessionStorage.setItem("requestToken", _data.request_token);
+    location.href = location.href.split("?")[0];
+});
+dispatcher.send(id, ["api", "user", "auth"], {
+    options: {...},
+    auth_token: auth_token
+})
+```
+
+
+
 ## get_user_info
 Информация об аккаунте
 #### way
@@ -98,3 +159,19 @@ npm install
           "personastateflags": 0,
           "loccountrycode": ""
     }
+#### example
+```javascript
+var id = dispatcher.add(function (_e) {
+    if(_e.success) {
+        dispatcher.remove(rid);
+        console.log("now you are logged and get account info")
+    } else {
+        sessionStorage.clear();
+        location.href = "";
+    }
+}.bind(this));
+
+dispatcher.send(rid, ["api", "user", "get_user_info"], {
+    request_token: sessionStorage.getItem("requestToken")
+});
+```
