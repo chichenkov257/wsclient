@@ -1,10 +1,5 @@
 # nsb
 
-# Подключится к серверу:
-1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/DanSylvest/nsb/blob/csgo/client/js/libs/dispatcher.dev.js);
-2) Библиотека предназначена для подключения к нашему серверу.
-
-
 ## Упрощенное API.
 ```javascript
 <script src="http://li1477-188.members.linode.com/dispatcher.dev.js"></script>
@@ -25,8 +20,22 @@ WB_API.on("ready", function() {
     WB_API.inventory.get_case_content(_case_id, _callback)
 
 
+# API
+- [User](#User)
+    - [get_auth_token](#get_auth_token)
+    - [auth](#auth)
+    - [get_user_info](#get_user_info)
+- [Inventory](#Inventory)
+    - [get_cases](#get_cases)
+    - [get_case_content](#get_case_content)
+
+# Самостоятельная нициализация диспетчера
+
+# Подключится к серверу:
+1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/DanSylvest/nsb/blob/csgo/client/js/libs/dispatcher.dev.js);
+2) Библиотека предназначена для подключения к нашему серверу.
+
 #### Пример
-Самостоятельная нициализация диспетчера
 ```javascript
 var dispatcher = new Dispatcher({
     protocol: "ws", // адрес протокола вебсокета
@@ -56,18 +65,6 @@ dispatcher.send(id, ["api", "user", "get_auth_token"], {});
 // Исключить данный хэндлер от подписки
 dispatcher.remove(id);
 ```
-
-
-
-
-# API
-- [User](#User)
-    - [get_auth_token](#get_auth_token)
-    - [auth](#auth)
-    - [get_user_info](#get_user_info)
-- [Inventory](#Inventory)
-    - [get_cases](#get_cases)
-    - [get_case_content](#get_case_content)
 
 ## User
 Область запросов для работы с пользователем нашей системы
