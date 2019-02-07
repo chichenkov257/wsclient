@@ -17,7 +17,6 @@
             constructor: function navigation(_options) {
                 var base = tools.merge({
                     redirect_error_page: "main"
-                    redirect_error_page: "main"
                 }, _options);
 
                 Basic.prototype.constructor.call(this, base);

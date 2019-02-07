@@ -1,7 +1,3 @@
-/**
- * Created by Aleksey Chichenkov <a.chichenkov@initi.ru> on 12/11/18.
- */
-
 (function () {
     var _mpath = "js/tools/tools";
     define(_mpath, [], function () {

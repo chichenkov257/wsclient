@@ -1,7 +1,3 @@
-/**
- * Created by Aleksey Chichenkov <a.chichenkov@initi.ru> on 12/11/18.
- */
-
 var deps = [
     "js/libs/client.dev",
     "js/tools/log",

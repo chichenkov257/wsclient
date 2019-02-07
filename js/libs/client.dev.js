@@ -1,7 +1,3 @@
-/**
- * Created by Aleksey Chichenkov <a.chichenkov@initi.ru> on 12/12/18.
- */
-
 (function () {
     var _mpath = "js/libs/client.dev";
     var deps = [];

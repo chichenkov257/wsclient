@@ -1,7 +1,3 @@
-/**
- * Created by Aleksey Chichenkov <a.chichenkov@initi.ru> on 12/12/18.
- */
-
 (function () {
     var log = (function () {
         var log_level = 0;
