@@ -5,8 +5,28 @@
 2) Библиотека предназначена для подключения к нашему серверу.
 
 
+## Упрощенное API.
+```javascript
+<script src="http://li1477-188.members.linode.com/dispatcher.dev.js"></script>
+<script>
+
+WB_API.on("ready", function() {
+    // Теперь можно отправлять запросы на сервер.
+    console.log("ready");
+})
+</script>
+```
+Методы доступные через объект WB_API:
+
+    WB_API.users.get_auth_token(_callback)
+    WB_API.users.auth(_auth_token, _options, _callback)
+    WB_API.users.get_user_info(_request_token, _callback)
+    WB_API.inventory.get_cases(_callback)
+    WB_API.inventory.get_case_content(_case_id, _callback)
+
+
 #### Пример
-Инициализация диспетчера
+Самостоятельная нициализация диспетчера
 ```javascript
 var dispatcher = new Dispatcher({
     protocol: "ws", // адрес протокола вебсокета
