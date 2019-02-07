@@ -1,7 +1,7 @@
 # nsb
 
 # Подключится к серверу:
-1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/blob/master/js/libs/dispatcher.dev.js);
+1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/DanSylvest/nsb/blob/csgo/client/js/libs/dispatcher.dev.js);
 2) Библиотека предназначена для подключения к нашему серверу.
 
 
@@ -45,6 +45,9 @@ dispatcher.remove(id);
     - [get_auth_token](#get_auth_token)
     - [auth](#auth)
     - [get_user_info](#get_user_info)
+- [Inventory](#Inventory)
+    - [get_cases](#get_cases)
+    - [get_case_content](#get_case_content)
 
 ## User
 Область запросов для работы с пользователем нашей системы
@@ -173,5 +176,81 @@ var id = dispatcher.add(function (_e) {
 
 dispatcher.send(rid, ["api", "user", "get_user_info"], {
     request_token: sessionStorage.getItem("requestToken")
+});
+```
+
+
+## Inventory
+Область запросов к нашей системе, для работы с кейсами
+
+## get_cases
+Возвращает список кейсов с информацией по ним
+
+#### way
+    ["api", "inventory", "get_cases"]
+#### request
+    {}
+#### response
+    {
+        success: Boolean,
+        cases: Array(
+            {
+                case_id: Number,
+                image: String,
+                name: String,
+                description: String,
+                old_price: Number,
+                new_price: Number
+            },
+            ...
+        )
+    }
+#### example
+```javascript
+var id = dispatcher.add(function (_event) {
+    // Распечатаем ответ
+    _event.success && console.log(JSON.stringify(_event.cases, true, 3))
+}.bind(this));
+dispatcher.send(rid, ["api", "inventory", "get_cases"]);
+```
+
+## get_case_content
+Возвращает список предметов для кейса с их информацией.
+
+#### way
+    ["api", "inventory", "get_case_content"]
+#### request
+    {}
+#### response
+    // Пример ответа
+    {
+        success: Boolean,
+        cases_content: Array(
+            {
+                "our_market_instanceid":null,
+                "market_name":"G3SG1 | Витраж (Прямо с завода)",
+                "name":"G3SG1 | Витраж",
+                "market_hash_name":"G3SG1 | Demeter (Factory New)",
+                "rarity":"Армейское качество",
+                "quality":"Прямо с завода",
+                "type":"Снайперская винтовка",
+                "mtype":"CSGO_Type_SniperRifl",
+                "slot":"Обыч.",
+                "image":"https://cdn.csgo.com//item/G3SG1+%7C+%D0%92%D0%B8%D1%82%D1%80%D0%B0%D0%B6+%28%D0%9F%D1%80%D1%8F%D0%BC%D0%BE+%D1%81+%D0%B7%D0%B0%D0%B2%D0%BE%D0%B4%D0%B0%29/150.png",
+                "description":[  ],
+                "tags":[  ],
+                "hash":"4be786633546c0f9e30817b1cae4415d"
+            },
+            ...
+        )
+    }
+#### example
+```javascript
+var id = dispatcher.add(function (_event) {
+    // Распечатаем ответ
+    _event.success && console.log(JSON.stringify(_event.cases_content, true, 3))
+}.bind(this));
+dispatcher.send(rid, ["api", "inventory", "get_case_content"], {
+    case_id: 0 // или любой другой идентификатор
 });
 ```
