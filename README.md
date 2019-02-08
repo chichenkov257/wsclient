@@ -69,7 +69,7 @@ WB_API.parse_query();
 # Самостоятельная нициализация диспетчера
 
 # Подключится к серверу:
-1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/blob/dispatcher.dev.js);
+1) Нужно скачать эту библиотеку - [Dispatcher](https://github.com/chichenkov257/wsclient/blob/master/dispatcher.dev.js);
 2) Библиотека предназначена для подключения к нашему серверу.
 
 #### Пример
