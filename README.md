@@ -19,10 +19,9 @@ WB_API.on("ready", function() {
 WB_API.users.get_auth_token(_callback)
 
 // Запрос на авторизацию в нашей системе
-// _auth_token - уникальный токен, который был выдан ранее
 // _options - параметры GET запроса, которые пришли при редиректе с страницы авторизации в стиме
 // Результат будет содержать request_token, он необходим для некоторых запросов
-WB_API.users.auth(_auth_token, _options, _callback)
+WB_API.users.auth(_options, _callback)
 
 // Запрос информации о пользователе
 // _request_token - идентификатор защищенного запроса
