@@ -5,10 +5,16 @@
 <script src="http://li1477-188.members.linode.com/dispatcher.dev.js"></script>
 <script>
 
-WB_API.on("ready", function() {
+if(WB_API.status() === "not_ready"){
+    WB_API.on("ready", function() {
+        // Теперь можно отправлять запросы на сервер.
+        console.log("ready");
+    })
+} else {
     // Теперь можно отправлять запросы на сервер.
     console.log("ready");
-})
+}
+
 </script>
 ```
 Методы доступные через объект WB_API:
