@@ -1,4 +1,5 @@
-(function () {
+"use strict";
+window.WB_API = (function () {
     var log = (function () {
         var log_level = 0;
         var color_default = "color: none";
@@ -388,5 +389,131 @@
         return Dispatcher;
     })();
 
-    return Dispatcher;
+    var _dispatcher;
+    var _status = "not_ready";
+    var _API = Base.class({
+        constructor: function (_options) {
+            Base.prototype.constructor.call(this, _options);
+        },
+        init: function () {
+            _dispatcher = new Dispatcher({
+                protocol: "ws",
+                host: "li1477-188.members.linode.com",
+                port: "1400"
+            });
+
+            _dispatcher.on("ready", function() {
+                _status = "ready";
+                this.trigger("ready");
+            }.bind(this));
+
+            this._init_requests();
+        },
+        _init_requests: function () {
+            this.user = {
+                get_auth_token: get_auth_token,
+                auth: auth,
+                get_user_info: get_user_info,
+            };
+
+            this.inventory = {
+                get_cases: get_cases,
+                get_case_content: get_case_content
+            }
+        },
+        redirect_to_steam_auth: function (_auth_token, _return_url, _host) {
+            var return_to = (_return_url || "http://" + location.host + location.pathname);
+            var host = (_host || "http://" + location.host + location.pathname);
+
+            var options = {
+                "openid.ns": "http://specs.openid.net/auth/2.0",
+                "openid.mode": "checkid_setup",
+                "openid.return_to": return_to + "?auth_token=" + _auth_token,
+                "openid.realm": host,
+                "openid.ns.sreg": "http://openid.net/extensions/sreg/1.1",
+                "openid.claimed_id": "http://specs.openid.net/auth/2.0/identifier_select",
+                "openid.identity": "http://specs.openid.net/auth/2.0/identifier_select",
+            };
+            var res = [];
+            for (var key in options) {
+                res.push(key + "=" + options[key]);
+            }
+            var q = res.join("&");
+
+            var uri = "https://steamcommunity.com/openid/login?" + q;
+
+            window.location = uri;
+        },
+        status: function () {
+            return _status;
+        },
+        parse_query: function () {
+            var query = {};
+            var keys = [];
+
+            if (location.search.length > 0) {
+                location.search.slice(1).split("&").forEach(function (val) {
+                    var arr = val.split("=");
+                    keys.push(arr[0]);
+                    query[arr[0]] = arr[1].replace(/%2F/g, "/").replace(/%3A/g, ":").replace(/%2C/g, ",").replace(/%3D/g, "=").replace(/%2B/g, "+").replace(/%3F/g, "?");
+                });
+            }
+
+            return query;
+        }
+    });
+
+    var get_auth_token = function (_callback) {
+        var id = _dispatcher.add(function (_e) {
+            _dispatcher.remove(id);
+            _callback(_e);
+        });
+        _dispatcher.send(id, ["api", "user", "get_auth_token"]);
+    };
+
+    var auth = function (_options, _callback) {
+        var auth_token = _options["auth_token"];
+        var id = _dispatcher.add(function (_data) {
+            _callback(_data);
+        });
+        _dispatcher.send(id, ["api", "user", "auth"], {
+            options: _options,
+            auth_token: auth_token
+        })
+    };
+
+    var get_user_info = function (_request_token, _callback) {
+        var id = _dispatcher.add(function (_e) {
+            _callback(_e);
+            _dispatcher.remove(id);
+        }.bind(this));
+
+        _dispatcher.send(id, ["api", "user", "get_user_info"], {
+            request_token: _request_token
+        });
+    };
+
+    var get_cases = function (_callback) {
+        var id = _dispatcher.add(function (_event) {
+            _dispatcher.remove(id);
+            _callback(_event);
+        }.bind(this));
+        _dispatcher.send(id, ["api", "inventory", "get_cases"]);
+    };
+
+    var get_case_content = function (_case_id,_callback) {
+        var id = _dispatcher.add(function (_event) {
+            _dispatcher.remove(id);
+            _callback(_event);
+        }.bind(this));
+        _dispatcher.send(id, ["api", "inventory", "get_case_content"], {
+            case_id: _case_id
+        });
+    };
+
+
+    var WB_API = new _API();
+    WB_API.init();
+
+    return WB_API;
 })();
