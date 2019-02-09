@@ -2,7 +2,7 @@
 
 ## Упрощенное API.
 ```javascript
-<script src="http://li1477-188.members.linode.com/dispatcher.dev.js"></script>
+<script src="https://win-box.ru/dispatcher.dev.js"></script>
 <script>
 
 if(WB_API.status() === "not_ready"){
@@ -80,8 +80,8 @@ WB_API.parse_query();
 #### Пример
 ```javascript
 var dispatcher = new Dispatcher({
-    protocol: "ws", // адрес протокола вебсокета
-    host: "<ip_address>", // адрес сервера
+    protocol: "wss", // адрес протокола вебсокета
+    host: "win-box.ru", // адрес сервера
     port: "1400"  // порт на котором работает сервер
 });
 
